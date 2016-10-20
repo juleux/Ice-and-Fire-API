@@ -1,0 +1,479 @@
+swagger: '2.0'
+schemes:
+  - http
+  - https
+host: http://anapioficeandfire.com
+basePath: 
+info:
+  version: 1.0.0
+  title: API of Fire and Ice
+  x-logo:
+    url: 'images/fireice.jpg'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+externalDocs:
+  description: Find out how to create Github repo for your OpenAPI spec.
+  url: 'https://github.com/Rebilly/generator-openapi-repo'
+tags:
+  - name: API Root
+    description: Provides information about the Fire and Ice book series
+  - name: books
+    description: Books
+  - name: characters
+    description: Characters
+  - name: houses
+    description: Houses
+paths:
+  /api:
+    get:
+      tags:
+        - API Root
+      summary: Get links to API Resources
+      description: Returns links to all of the available resources. 
+      operationId: getRoot
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/RootResponse'
+        '400':
+          description: Invalid status value
+  /api/books:
+    get:
+      tags:
+        - books
+      summary: Get a list of books
+      description: Returns a list of books.  Returns entire list of books when no parameters are specified.
+      operationId: getBooks
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: query
+          description: Returns books with the specified name.
+          required: false
+          type: string
+        - name: fromReleaseDate
+          in: query
+          description: Only books that were released after, or on, the given date are included in the response.
+          required: false
+          type: string
+        - name: toReleaseDate
+          in: query
+          description: Only books that were released before, or on, the given date are included in the response.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid status value
+  /api/books/{id}:
+    get:
+      tags:
+        - books
+      summary: Get information about a specific book
+      description: Returns the book with the specified id. 
+      operationId: findBookById
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/BooksResponse'
+        '400':
+          description: Invalid status value
+  /api/characters:
+    get:
+      tags:
+        - characters
+      summary: Get a list of characters
+      description: Returns a list of characters.  Returns entire list of characters when no parameters are specified.
+      operationId: getCharacters
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: query
+          description: Returns characters with the specified name.
+          required: false
+          type: string
+        - name: gender
+          in: query
+          description: Only characters with the specified gender are included in the response.
+          required: false
+          type: string
+        - name: culture
+          in: query
+          description: Only characters with the specified culture are included in the response.
+          required: false
+          type: string
+        - name: born
+          in: query
+          description: Only characters that were born in the specified year are included in the response.
+          required: false
+          type: string
+        - name: died
+          in: query
+          description: Only characters that died in the specified year are included in the response.
+          required: false
+          type: string
+        - name: isAlive
+          in: query
+          description: Only characters with the specified culture are included in the response.
+          required: false
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Url not found
+  /api/characters/{id}:
+    get:
+      tags:
+        - characters
+      summary: Get information about a specific character
+      description: Returns the character with the specified id. 
+      operationId: findCharacterById
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/CharactersResponse'
+        '400':
+          description: Invalid status value
+  /api/houses:
+    get:
+      tags:
+        - houses
+      summary: Get a list of houses
+      description: Returns a list of houses.  Returns entire list of houses when no parameters are specified.
+      operationId: getHouses
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: query
+          description: Returns houses with the specified name.
+          required: false
+          type: string
+        - name: region
+          in: query
+          description: Only houses located in the specified region are included in the response.
+          required: false
+          type: string
+        - name: words
+          in: query
+          description: Only houses with the specified words are included in the response.
+          required: false
+          type: string
+        - name: hasWords
+          in: query
+          description: Only houses that have words associated with them are included in the response.
+          required: false
+          type: boolean
+        - name: hasTitle
+          in: query
+          description: Only houses that have titles associated with them are included in the response.
+          required: false
+          type: boolean
+        - name: hasSeats
+          in: query
+          description: Only houses that have seats associated with them are included in the response.
+          required: false
+          type: boolean
+        - name: hasDiedOut
+          in: query
+          description: Only houses that have died out are included in the response.
+          required: false
+          type: boolean
+        - name: hasAncestralWeapons
+          in: query
+          description: Only houses that have ancestral weapons associated with them are included in the response.
+          required: false
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Url not found
+  /api/houses/{id}:
+    get:
+      tags:
+        - houses
+      summary: Get information about a specific house
+      description: Returns the house with the specified id. 
+      operationId: findHouseById
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/HousesResponse'
+        '400':
+          description: Invalid status value
+definitions:
+  RootResponse:
+    type: object
+    properties:
+      books:
+        type: string
+        format: url
+        description: endpoint for books resource
+        example: http://www.anapioficeandfire.com/api/books
+      characters:
+        type: string
+        format: url
+        description: endpoint for characters resource
+        example: http://www.anapioficeandfire.com/api/characters
+      houses:
+        type: string
+        format: url
+        description: endpoint for houses resource
+        example: http://www.anapioficeandfire.com/api/houses
+  BooksResponse:
+    type: object
+    properties:
+      url:
+        type: string
+        format: url
+        description: The hypermedia URL of this resource.
+        example: http://www.anapioficeandfire.com/api/books/1
+      name:
+        type: string
+        description: The name of this book.
+        example: A Game of Thrones
+      isbn:
+        type: string
+        format: 'ISBN-13'
+        description: The International Standard Book Number (isbn) that uniquely identifies this book.
+        example: 978-055310354
+      authors:
+        type: array
+        items:
+          type: string
+        description: An array of names of the authors that wrote this book.
+        example: "George R. R. Martin"  
+      numberOfPages:
+        type: integer
+        description: The number of pages in this book.
+        example: 694
+      publisher:
+        type: string
+        description: The company that published this book.
+        example: Bantam Books
+      country:
+        type: string
+        description: The country which this book was published in.
+        example: United States
+      mediaType:
+        type: string
+        description: The type of media this book was released in. 
+        enum:
+          - Hardback
+          - GraphicNovel
+          - Paperback
+        example: Hardcover
+      released:
+        type: string
+        format: date-time
+        description: The date, in ISO 8601 format, at which this book was released.
+        example: '1996-08-01T00:00:00'
+      characters:
+        type: array
+        items:
+          type: string
+          format: url
+        description: An array resource URLs containing the characters from this book.
+        example: [http://www.anapioficeandfire.com/api/characters/2, ...]
+      povCharacters:
+        type: array
+        items:
+          type: string
+          format: url
+        description: An array of Character resource URLs that has had a POV-chapter in this book.
+        example: [http://www.anapioficeandfire.com/api/characters/148, ...]
+  CharactersResponse:
+    type: object
+    properties:
+      url:
+        type: string
+        format: url
+        description: The hypermedia URL of this resource.
+        example: http://www.anapioficeandfire.com/api/characters/823
+      name:
+        type: string
+        description: The name of this character.
+        example: Petyr Baelish
+      gender:
+        type: string
+        description: The gender of this character. 
+        enum:
+          - Female
+          - Male
+          - Unknown
+        example: Male
+      culture:
+        type: string
+        description: The culture that this character belongs to.
+        example: Valemen  
+      born:
+        type: string
+        description: The year that this person was born.
+        example: In 268 AC, at the Fingers
+      died:
+        type: string
+        description: The year that this person died.
+        example: ""
+      titles:
+        type: array
+        items:
+          type: string
+        description: The titles that this character holds.
+        example: [Master of coin (formerly),Lord Paramount of the Trident, Lord of Harrenhal, Lord Protector of the Vale]
+      aliases:
+        type: array
+        items:
+          type: string
+        description: The aliases that this character goes by.
+        example: [Littlefinger]
+      father:
+        type: string
+        format: url
+        description: The character resource URL of this character''s father.
+        example: ""
+      mother:
+        type: string
+        format: url
+        description: The character resource URL of this character''s mother.
+        example: ""
+      spouse:
+        type: string
+        format: url
+        description: The character resource URL of this character''s spouse.
+        example: http://www.anapioficeandfire.com/api/characters/688
+      allegiances:
+        type: array
+        items:
+          type: string
+          format: url
+        description: An array of House resource URLs that this character is loyal to.
+        example: [http://www.anapioficeandfire.com/api/houses/10, http://www.anapioficeandfire.com/api/houses/11]
+      books:
+        type: array
+        items:
+          type: string
+          format: url
+        description: An array of Book resource URLs that this character has been in.
+        example: [http://www.anapioficeandfire.com/api/books/1, ...]
+      povBooks:
+        type: array
+        items:
+          type: string
+          format: url
+        description: An array of Book resource URLs that this character has had a POV-chapter in.
+        example: []
+      tvSeries:
+        type: array
+        items:
+          type: string
+        description: An array containing the names of Game of Thrones seasons that this character has appeared in.
+        example: [Season 1, Season 2, Season 3, Season 4, Season 5]
+      playedBy:
+        type: array
+        items:
+          type: string
+        description: An array containing the names of actors that have played this character in the TV show Game Of Thrones.
+        example: [Aidan Gillen]
+  HousesResponse:
+    type: object
+    properties:
+      url:
+        type: string
+        format: url
+        description: The hypermedia URL of this resource.
+        example: http://www.anapioficeandfire.com/api/houses/10
+      name:
+        type: string
+        description: The name of this house.
+        example: House Baelish of Harrenhal
+      region:
+        type: string
+        description: The region that this house resides in.
+        example: The Riverland
+      coatOfArms:
+        type: string
+        description: Text describing the coat of arms of this house.
+        example: A field of silver mockingbirds, on a green field(Vert, semé of mockingbirds argent)  
+      words:
+        type: string
+        description: The words of this house.
+        example: ""
+      titles:
+        type: array
+        items:
+          type: string
+        description: The titles that this house holds.
+        example: [Lord Paramount of the Trident, Lord of Harrenhal]
+      seats:
+        type: array
+        items:
+          type: string
+        description: The seats that this house holds.
+        example: [Harrenhal]
+      currentLord:
+        type: string
+        format: url
+        description: The Character resource URL of this house''s current lord.
+        example: http://www.anapioficeandfire.com/api/characters/823
+      heir:
+        type: string
+        format: url
+        description: The Character resource URL of this house''s heir.
+        example: ""
+      overlord:
+        type: string
+        format: url
+        description: The House resource URL that this house answers to.
+        example: http://www.anapioficeandfire.com/api/houses/16
+      founded:
+        type: string
+        description: The year that this house was founded.
+        example: 299 AC
+      founder:
+        type: string
+        format: url
+        description: The Character resource URL that founded this house.
+        example:  http://www.anapioficeandfire.com/api/characters/823
+      diedOut:
+        type: string
+        description: The year that this house died out.
+        example: ""
+      ancestralWeapons:
+        type: array
+        items:
+          type: string
+        description: An array of names of the noteworthy weapons that this house owns.
+        example: []
+      cadetBranches:
+        type: array
+        items:
+          type: string
+          format: url
+        description: An array of House resource URLs that was founded from this house.
+        example: []
+      swornMembers:
+        type: array
+        items:
+          type: string
+          format: url
+        description: An array of Character resource URLs that are sworn to this house.
+        example: [http://www.anapioficeandfire.com/api/characters/651,   http://www.anapioficeandfire.com/api/characters/804, http://www.anapioficeandfire.com/api/characters/823, http://www.anapioficeandfire.com/api/characters/957, http://www.anapioficeandfire.com/api/characters/970]
+#

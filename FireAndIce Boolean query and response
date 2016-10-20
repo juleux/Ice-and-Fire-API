@@ -1,0 +1,331 @@
+ >  ~ $ curl "http://www.anapioficeandfire.com/api/houses?hasWords=false"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0[
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/2",
+    "name": "House Allyrion of Godsgrace",
+    "region": "Dorne",
+    "coatOfArms": "Gyronny Gules and Sable, a hand couped Or",
+    "words": "No Foe May Pass",
+    "titles": [],
+    "seats": [
+      "Godsgrace"
+    ],
+    "currentLord": "http://www.anapioficeandfire.com/api/characters/298",
+    "heir": "http://www.anapioficeandfire.com/api/characters/1922",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/285",
+    "founded": "",
+    "founder": "",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/298",
+      "http://www.anapioficeandfire.com/api/characters/1129",
+      "http://www.anapioficeandfire.com/api/characters/1301",
+      "http://www.anapioficeandfire.com/api/characters/1922"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/4",
+    "name": "House Ambrose",
+    "region": "The Reach",
+    "coatOfArms": "Or, semy of ants gules",
+    "words": "Never Resting",
+    "titles": [],
+    "seats": [],
+    "currentLord": "http://www.anapioficeandfire.com/api/characters/141",
+    "heir": "",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/398",
+    "founded": "",
+    "founder": "",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/82",
+      "http://www.anapioficeandfire.com/api/characters/102",
+      "http://www.anapioficeandfire.com/api/characters/141",
+      "http://www.anapioficeandfire.com/api/characters/152",
+      "http://www.anapioficeandfire.com/api/characters/344"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/7",
+    "name": "House Arryn of the Eyrie",
+    "region": "The Vale",
+    "coatOfArms": "A sky-blue falcon soaring against a white moon, on a sky-blue field(Bleu celeste, upon a plate a falcon volant of the field)",
+    "words": "As High as Honor",
+    "titles": [
+      "King of Mountain and Vale (formerly)",
+      "Lord of the Eyrie",
+      "Defender of the Vale",
+      "Warden of the East"
+    ],
+    "seats": [
+      "The Eyrie (summer)",
+      "Gates of the Moon (winter)"
+    ],
+    "currentLord": "http://www.anapioficeandfire.com/api/characters/894",
+    "heir": "http://www.anapioficeandfire.com/api/characters/477",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/16",
+    "founded": "Coming of the Andals",
+    "founder": "http://www.anapioficeandfire.com/api/characters/144",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [
+      "http://www.anapioficeandfire.com/api/houses/6"
+    ],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/49",
+      "http://www.anapioficeandfire.com/api/characters/92",
+      "http://www.anapioficeandfire.com/api/characters/93",
+      "http://www.anapioficeandfire.com/api/characters/107",
+      "http://www.anapioficeandfire.com/api/characters/223",
+      "http://www.anapioficeandfire.com/api/characters/265",
+      "http://www.anapioficeandfire.com/api/characters/300",
+      "http://www.anapioficeandfire.com/api/characters/356",
+      "http://www.anapioficeandfire.com/api/characters/477",
+      "http://www.anapioficeandfire.com/api/characters/508",
+      "http://www.anapioficeandfire.com/api/characters/540",
+      "http://www.anapioficeandfire.com/api/characters/548",
+      "http://www.anapioficeandfire.com/api/characters/558",
+      "http://www.anapioficeandfire.com/api/characters/572",
+      "http://www.anapioficeandfire.com/api/characters/688",
+      "http://www.anapioficeandfire.com/api/characters/894",
+      "http://www.anapioficeandfire.com/api/characters/1068",
+      "http://www.anapioficeandfire.com/api/characters/1193",
+      "http://www.anapioficeandfire.com/api/characters/1280",
+      "http://www.anapioficeandfire.com/api/characters/1443",
+      "http://www.anapioficeandfire.com/api/characters/1655",
+      "http://www.anapioficeandfire.com/api/characters/1693",
+      "http://www.anapioficeandfire.com/api/characters/1715",
+      "http://www.anapioficeandfire.com/api/characters/1884"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/8",
+    "name": "House Ashford of Ashford",
+    "region": "The Reach",
+    "coatOfArms": "Tenny, a sun in splendour beneath a chevron inverted argent",
+    "words": "Our Sun Shines Bright",
+    "titles": [
+      "Lord of Ashford"
+    ],
+    "seats": [
+      "Ashford"
+    ],
+    "currentLord": "",
+    "heir": "",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/398",
+    "founded": "",
+    "founder": "",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/121",
+      "http://www.anapioficeandfire.com/api/characters/641",
+      "http://www.anapioficeandfire.com/api/characters/895",
+      "http://www.anapioficeandfire.com/api/characters/1812"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/17",
+    "name": "House Baratheon of Storm's End",
+    "region": "The Stormlands",
+    "coatOfArms": "A black crowned stag, on a gold field(Or, a stag salient, crowned, sable)",
+    "words": "Ours is the Fury",
+    "titles": [
+      "Lord of Storm's End",
+      "Lord Paramount of the Stormlands"
+    ],
+    "seats": [
+      "Storm's End",
+      "Dragonstone (House Baratheon of Dragonstone)"
+    ],
+    "currentLord": "http://www.anapioficeandfire.com/api/characters/1029",
+    "heir": "http://www.anapioficeandfire.com/api/characters/775",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/16",
+    "founded": "1 AC",
+    "founder": "http://www.anapioficeandfire.com/api/characters/797",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [
+      "http://www.anapioficeandfire.com/api/houses/15",
+      "http://www.anapioficeandfire.com/api/houses/16",
+      "http://www.anapioficeandfire.com/api/houses/33",
+      "http://www.anapioficeandfire.com/api/houses/423"
+    ],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/110",
+      "http://www.anapioficeandfire.com/api/characters/128",
+      "http://www.anapioficeandfire.com/api/characters/216",
+      "http://www.anapioficeandfire.com/api/characters/230",
+      "http://www.anapioficeandfire.com/api/characters/249",
+      "http://www.anapioficeandfire.com/api/characters/315",
+      "http://www.anapioficeandfire.com/api/characters/435",
+      "http://www.anapioficeandfire.com/api/characters/679",
+      "http://www.anapioficeandfire.com/api/characters/794",
+      "http://www.anapioficeandfire.com/api/characters/797",
+      "http://www.anapioficeandfire.com/api/characters/862",
+      "http://www.anapioficeandfire.com/api/characters/870",
+      "http://www.anapioficeandfire.com/api/characters/986",
+      "http://www.anapioficeandfire.com/api/characters/1044",
+      "http://www.anapioficeandfire.com/api/characters/1188",
+      "http://www.anapioficeandfire.com/api/characters/1233",
+      "http://www.anapioficeandfire.com/api/characters/1355",
+      "http://www.anapioficeandfire.com/api/characters/1473",
+      "http://www.anapioficeandfire.com/api/characters/1552"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/18",
+    "name": "House Beesbury of Honeyholt",
+    "region": "The Reach",
+    "coatOfArms": "Paly or and sable, on a pale of the last three beehives of the first",
+    "words": "Beware our Sting",
+    "titles": [],
+    "seats": [
+      "Honeyholt"
+    ],
+    "currentLord": "http://www.anapioficeandfire.com/api/characters/1103",
+    "heir": "",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/195",
+    "founded": "",
+    "founder": "http://www.anapioficeandfire.com/api/characters/366",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/94",
+      "http://www.anapioficeandfire.com/api/characters/187",
+      "http://www.anapioficeandfire.com/api/characters/193",
+      "http://www.anapioficeandfire.com/api/characters/366",
+      "http://www.anapioficeandfire.com/api/characters/509",
+      "http://www.anapioficeandfire.com/api/characters/513",
+      "http://www.anapioficeandfire.com/api/characters/549",
+      "http://www.anapioficeandfire.com/api/characters/671",
+      "http://www.anapioficeandfire.com/api/characters/1103"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/34",
+    "name": "House Bolton of the Dreadfort",
+    "region": "The North",
+    "coatOfArms": "A red flayed man on pink de sang",
+    "words": "Our Blades are Sharp",
+    "titles": [
+      "Red King (Age of Heroes)",
+      "Lord of the Dreadfort",
+      "Warden of the North"
+    ],
+    "seats": [
+      "The Dreadfort"
+    ],
+    "currentLord": "http://www.anapioficeandfire.com/api/characters/933",
+    "heir": "http://www.anapioficeandfire.com/api/characters/849",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/16",
+    "founded": "Age of Heroes",
+    "founder": "",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/196",
+      "http://www.anapioficeandfire.com/api/characters/314",
+      "http://www.anapioficeandfire.com/api/characters/849",
+      "http://www.anapioficeandfire.com/api/characters/933",
+      "http://www.anapioficeandfire.com/api/characters/1084",
+      "http://www.anapioficeandfire.com/api/characters/1159",
+      "http://www.anapioficeandfire.com/api/characters/1208",
+      "http://www.anapioficeandfire.com/api/characters/1313",
+      "http://www.anapioficeandfire.com/api/characters/1329",
+      "http://www.anapioficeandfire.com/api/characters/1452",
+      "http://www.anapioficeandfire.com/api/characters/1492",
+      "http://www.anapioficeandfire.com/api/characters/1648",
+      "http://www.anapioficeandfire.com/api/characters/1747",
+      "http://www.anapioficeandfire.com/api/characters/1949",
+      "http://www.anapioficeandfire.com/api/characters/2077"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/51",
+    "name": "House Buckwell of the Antlers",
+    "region": "The Crownlands",
+    "coatOfArms": "A rack of golden antlers, on a field of vair(Vair, a stag's attire or)",
+    "words": "Pride and Purpose",
+    "titles": [
+      "Lord of the Antlers"
+    ],
+    "seats": [
+      "the Antlers"
+    ],
+    "currentLord": "",
+    "heir": "",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/16",
+    "founded": "",
+    "founder": "",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/537"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/52",
+    "name": "House Bulwer of Blackcrown",
+    "region": "The Reach",
+    "coatOfArms": "Sanguine, a bull`s skull argent",
+    "words": "Death Before Disgrace",
+    "titles": [],
+    "seats": [
+      "Blackcrown"
+    ],
+    "currentLord": "http://www.anapioficeandfire.com/api/characters/100",
+    "heir": "",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/195",
+    "founded": "",
+    "founder": "",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/100",
+      "http://www.anapioficeandfire.com/api/characters/224",
+      "http://www.anapioficeandfire.com/api/characters/575"
+    ]
+  },
+  {
+    "url": "http://www.anapioficeandfire.com/api/houses/60",
+    "name": "House Caron of Nightsong",
+    "region": "The Stormlands",
+    "coatOfArms": "A field of black nightingales on yellow(Or, semé of nightingales sable)",
+    "words": "No Song so Sweet",
+    "titles": [
+      "Lord of the Marches",
+      "Lord of Nightsong"
+    ],
+100 12935    0 12935    0     0  29599      0 --:--:-- --:--:-- --:--:-- 29599
+      "Nightsong"
+    ],
+    "currentLord": "http://www.anapioficeandfire.com/api/characters/925",
+    "heir": "",
+    "overlord": "http://www.anapioficeandfire.com/api/houses/15",
+    "founded": "",
+    "founder": "",
+    "diedOut": "",
+    "ancestralWeapons": [],
+    "cadetBranches": [],
+    "swornMembers": [
+      "http://www.anapioficeandfire.com/api/characters/220",
+      "http://www.anapioficeandfire.com/api/characters/221",
+      "http://www.anapioficeandfire.com/api/characters/769",
+      "http://www.anapioficeandfire.com/api/characters/816",
+      "http://www.anapioficeandfire.com/api/characters/925"
+    ]
+  }
+]
+ >  ~
