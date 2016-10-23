@@ -6,12 +6,17 @@ host: anapioficeandfire.com
 basePath: 
 info:
   version: 1.0.0
-  title: API of Fire and Ice
+  title: API of Ice and Fire
+  summary: All of the data you've ever wanted from the universe of Ice And Fire.
+
   x-logo:
     url: 'images/fireice.jpg'
   description: |
-    # Overview
-    This documentation will help you familiarise yourself with the API and how to consume the different resources that are available. The documentation provides all information needed to get started and it also has educational examples for all resources.
+    # API of Ice and Fire
+    ### All of the data you've ever wanted from the universe of Ice And Fire.
+    
+    ## Overview
+    This documentation will help you familiarize yourself with the API and how to consume the different resources that are available. The documentation provides all information needed to get started and it also has educational examples for all resources.
     
     If you're interested in using a native implementation, please take a look at the **Libraries** section.
     
@@ -77,7 +82,7 @@ info:
     ## Versioning
     Custom media types are used in An API of Ice And Fire to let consumers choose which version of the data they wish to receive. This is done by adding the following type to the Accept header when you make a request. Note that media types are specific to resources, this allows them to change independently from each other.
     ###
-    >**Important: If a version is not specified in the request the default version will be used. The default version may change in the future and can thus break the consumer's application. Make sure to always request a specific version in the `Accept` header as shown in the example below.**
+    >**Important: If a version is not specified in the request the default version will be used. The default version may change in the future and can thus break the consumer's application. Make sure to always request a specific version in the** `Accept` **header as shown in the example below.**
     ###
     You specify a version like so:
     ```json
@@ -140,14 +145,22 @@ paths:
       responses:
         '200':
           description: successful operation
+          schema:
+            $ref: '#/definitions/BooksResponse'
         '400':
           description: Invalid status value
-  /api/books/{id}:
+  /api/books/{book-id}:
+    parameters:
+      - name: book-id
+        in: path
+        description: The id of the book to return.
+        type: integer
+        required: true
     get:
       tags:
         - books
       summary: Get information about a specific book
-      description: Returns the book with the specified id. 
+      description: Returns the book with the specified book-id. 
       operationId: findBookById
       produces:
         - application/json
@@ -201,14 +214,22 @@ paths:
       responses:
         '200':
           description: successful operation
-        '404':
-          description: Url not found
-  /api/characters/{id}:
+          schema:
+            $ref: '#/definitions/CharactersResponse'
+        '400':
+          description: Invalid status value
+  /api/characters/{character-id}:
+    parameters:
+      - name: character-id
+        in: path
+        description: The id of the character to return.
+        type: integer
+        required: true
     get:
       tags:
         - characters
       summary: Get information about a specific character
-      description: Returns the character with the specified id. 
+      description: Returns the character with the specified character-id. 
       operationId: findCharacterById
       produces:
         - application/json
@@ -272,14 +293,22 @@ paths:
       responses:
         '200':
           description: successful operation
-        '404':
-          description: Url not found
-  /api/houses/{id}:
+          schema:
+            $ref: '#/definitions/HousesResponse'
+        '400':
+          description: Invalid status value
+  /api/houses/{house-id}:
+    parameters:
+      - name: house-id
+        in: path
+        description: The id of the house to return.
+        type: integer
+        required: true
     get:
       tags:
         - houses
       summary: Get information about a specific house
-      description: Returns the house with the specified id. 
+      description: Returns the house with the specified house-id. 
       operationId: findHouseById
       produces:
         - application/json
