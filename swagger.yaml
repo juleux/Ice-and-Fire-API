@@ -1,7 +1,6 @@
 swagger: '2.0'
 schemes:
   - http
-  - https
 host: anapioficeandfire.com
 basePath: 
 info:
@@ -10,20 +9,31 @@ info:
   summary: All of the data you've ever wanted from the universe of Ice And Fire.
 
   x-logo:
-    url: 'images/fireice.jpg'
+    url: 'images/fire_and_ice_rev.jpg'
   description: |
-    # API of Ice and Fire
-    ### All of the data you've ever wanted from the universe of Ice And Fire.
-    
-    ## Overview
+    # Overview
     This documentation will help you familiarize yourself with the API and how to consume the different resources that are available. The documentation provides all information needed to get started and it also has educational examples for all resources.
     
-    If you're interested in using a native implementation, please take a look at the **Libraries** section.
+    If you're interested in using a native implementation, please take a look at the [Libraries](#tag/libraries) section.
     
-    ## Authentication
-    An API of Ice And Fire is an open API. This means that no authentication is required to query the API for data. Since no authentication is required, there is only support for *GET*-ing data.
+    # Authentication
+    An API of Ice And Fire is an open API. This means that no authentication is required to query the API for data. Since no authentication is required, the API only supports the `GET` request method.
     
-    ## Pagination
+    # Caching
+    To help our server and your client we provide a few ways for you to use caching. Each API response includes the [ETag-header](https://en.wikipedia.org/wiki/HTTP_ETag) and the Last-Modified header. These headers can be used to ask our server if the data has changed or not. If the data has not changed you will receive an empty response body with a [304 Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1). If the data has changed you will receive a 200 with the updated data.
+    
+    #### To use the ETag, include the following header in your request:
+    
+    ```json
+    If-None-Match: "your_etag_here"
+    ```   
+     #### To use Last-Modified, include the following header in your request:   
+    ```json
+    If-Modified-Since: "date_here"
+    ```       
+    We advise you to use the above mentioned caching strategies, this will increase the speed of your client as well as save us bandwidth.
+    
+    # Pagination
     An API of Ice And Fire provides a lot of data about the world of Westeros. To prevent our servers from getting cranky, the API will automatically paginate the responses. You will learn how to create requests with pagination parameters and consume the response.
     
     ### Things worth noting
@@ -34,7 +44,7 @@ info:
     
     ### Constructing a request with pagination
     
-    You specify which page you want to access with the `?page` parameter, if you don't provide the ?page parameter the first page will be returned. You can also specify the size of the page with the `?pageSize` parameter, if you don't provide the `?pageSize` parameter the default size of 10 will be used.
+    You specify which page you want to access with the `?page` parameter, if you don't provide the `?page` parameter the first page will be returned. You can also specify the size of the page with the `?pageSize` parameter, if you don't provide the `?pageSize` parameter the default size of 10 will be used.
     
     Let's make a request for the first page of characters with a page size of 10. Since we're only interested in the pagination information we provide the `-I` parameter to say that we only care about the headers.
     
@@ -60,53 +70,80 @@ info:
     These links can then be used to navigate to other pages of results.
     
     
-    ## Rate Limiting
+    # Rate Limiting
     To prevent malicious usage of our API we've a limit on the number of requests a given IP address can make to the API. This limit is set to 20000 requests per day. There should be no reason for hitting the limit if you implement proper caching strategies in your client. If you happen to hit the limit you'll receive a [403 Forbidden](https://en.wikipedia.org/wiki/HTTP_403) on all your requests for the remainder of the 24 hour time period.
     
     
-    ## Caching
-    To help our server and your client we provide a few ways for you to use caching. Each API response includes the [ETag-header](https://en.wikipedia.org/wiki/HTTP_ETag) and the Last-Modified header. These headers can be used to ask our server if the data has changed or not. If the data has not changed you will receive an empty response body with a [304 Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1). If the data has changed you will receive a 200 with the updated data.
-    
-    #### To use the ETag, include the following header in your request:
-    
-    ```json
-    If-None-Match: "your_etag_here"
-    ```   
-     #### To use Last-Modified, include the following header in your request:   
-    ```json
-    If-Modified-Since: "date_here"
-    ```       
-    We advise you to use the above mentioned caching strategies, this will increase the speed of your client as well as save us bandwidth.
-    
-    
-    ## Versioning
+
+    # Versioning
     Custom media types are used in An API of Ice And Fire to let consumers choose which version of the data they wish to receive. This is done by adding the following type to the Accept header when you make a request. Note that media types are specific to resources, this allows them to change independently from each other.
     ###
-    >**Important: If a version is not specified in the request the default version will be used. The default version may change in the future and can thus break the consumer's application. Make sure to always request a specific version in the** `Accept` **header as shown in the example below.**
+    >**If a version is not specified in the request the default version will be used. The default version may change in the future and can thus break the consumer's application. Make sure to always request a specific version in the** `Accept` **header as shown in the example below.**
     ###
     You specify a version like so:
     ```json
     application/vnd.anapioficeandfire+json; version=1
     ```
+#    # Libraries
+#    There are a number of helper libraries you can use to consume the API of Ice and Fire.
+#    ###
+#    #### Elixir
+#    * [maester](https://github.com/sotojuan/maester) by [Juan Soto](https://github.com/sotojuan)
+#    #### GraphQL
+#    * [iceandfire-graphql](https://github.com/afram/iceandfire-graphql) by [Marwan Butrous](https://github.com/afram)
+#    #### Node
+#    * [asoiaf-api](https://github.com/arbazsiddiqui/A-song-of-ice-and-fire-API) by [Arbaz Siddqiui](https://github.com/arbazsiddiqui)
+#    * [node-api-iceandfire](https://github.com/alexwebb2/node-api-iceandfire) by Alex Webb
+#    #### Python
+#    * [anapioficeandfire-python](https://github.com/joakimskoog/anapioficeandfire-python) by the author of An API of Ice And Fire, [Joakim Skoog](https://github.com/joakimskoog)
+#    #### Swift
+#    * [IceAndFireKit](https://github.com/murphb52/IceAndFireKit) by [Brian Murphy](https://github.com/murphb52)
+#    * [IceAndFireLoader](https://github.com/ujell/IceAndFireLoader) by [Yucel Uzun](https://github.com/ujell)
+#    * [WesterosKit](https://github.com/fitomad/WesterosKit) by [Adolfo](https://github.com/fitomad)
+    
 #	 
 tags:
   - name: API Root
-    description: Provides information about the Fire and Ice book series
+    description: |
+      ```json
+      $ curl "http://www.anapioficeandfire.com/api"
+      ```
   - name: books
-    description: Books
+    description: The API currently contains data on all five published novels in the *A Song of Ice and Fire*  © series.  It also references additional material in the form of novellas.  
   - name: characters
-    description: Characters
+    description: The API contains information on 2000+ characters.
   - name: houses
-    description: Houses
-
-
+    description: The API contains information on 400+ houses.
+  - name: libraries
+    description: |
+      There are a number of helper libraries you can use to consume the API of Ice and Fire.
+      ###
+      #### Elixir
+      * [maester](https://github.com/sotojuan/maester) by [Juan Soto](https://github.com/sotojuan)
+      #### GraphQL
+      * [iceandfire-graphql](https://github.com/afram/iceandfire-graphql) by [Marwan Butrous](https://github.com/afram)
+      #### Node
+      * [asoiaf-api](https://github.com/arbazsiddiqui/A-song-of-ice-and-fire-API) by [Arbaz Siddqiui](https://github.com/arbazsiddiqui)
+      * [node-api-iceandfire](https://github.com/alexwebb2/node-api-iceandfire) by Alex Webb
+      #### Python
+      * [anapioficeandfire-python](https://github.com/joakimskoog/anapioficeandfire-python) by the author of An API of Ice And Fire, [Joakim Skoog](https://github.com/joakimskoog)
+      #### Swift
+      * [IceAndFireKit](https://github.com/murphb52/IceAndFireKit) by [Brian Murphy](https://github.com/murphb52)
+      * [IceAndFireLoader](https://github.com/ujell/IceAndFireLoader) by [Yucel Uzun](https://github.com/ujell)
+      * [WesterosKit](https://github.com/fitomad/WesterosKit) by [Adolfo](https://github.com/fitomad)
+  - name: licensing & copyright
+    description: |
+      The *A Song of Ice and Fire* © series and its data is the property of George R.R. Martin. The data is used without claim of ownership.
+      All data has been collected from free sources such as *A Wiki of Ice and Fire*.
+      This project uses a BSD license.
+  
 paths:
   /api:
     get:
       tags:
         - API Root
       summary: Get links to API Resources
-      description: Returns links to all of the available resources. 
+      description: Returns a url for each resource type (books, characters, houses) for use in a subsequent request.  
       operationId: getRoot
       produces:
         - application/json
@@ -122,7 +159,11 @@ paths:
       tags:
         - books
       summary: Get a list of books
-      description: Returns a list of books.  Returns entire list of books when no parameters are specified.
+      description: |
+        Returns data for every book in the database.  Returns data for a subset of books when query parameters are included in the request.
+        ###
+        > By default, only the first ten books in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
+        ###
       operationId: getBooks
       produces:
         - application/json
@@ -134,12 +175,12 @@ paths:
           type: string
         - name: fromReleaseDate
           in: query
-          description: Only books that were released after, or on, the given date are included in the response.
+          description: Returns books that were released after, or on, the specified date.
           required: false
           type: string
         - name: toReleaseDate
           in: query
-          description: Only books that were released before, or on, the given date are included in the response.
+          description: Returns books that were released on or before the specified date.
           required: false
           type: string
       responses:
@@ -153,14 +194,14 @@ paths:
     parameters:
       - name: book-id
         in: path
-        description: The id of the book to return.
+        description: The id of the book being requested.
         type: integer
         required: true
     get:
       tags:
         - books
       summary: Get information about a specific book
-      description: Returns the book with the specified book-id. 
+      description: Returns data for the book with the specified book-id. 
       operationId: findBookById
       produces:
         - application/json
@@ -176,7 +217,11 @@ paths:
       tags:
         - characters
       summary: Get a list of characters
-      description: Returns a list of characters.  Returns entire list of characters when no parameters are specified.
+      description: |
+        Returns data for each character in the database.  Returns data for a subset of characters when query parameters are included in the request.
+        ###
+        > By default, only the first ten characters in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
+        ###
       operationId: getCharacters
       produces:
         - application/json
@@ -188,27 +233,27 @@ paths:
           type: string
         - name: gender
           in: query
-          description: Only characters with the specified gender are included in the response.
+          description: Returns characters with the specified gender.
           required: false
           type: string
         - name: culture
           in: query
-          description: Only characters with the specified culture are included in the response.
+          description: Returns characters with the specified culture.
           required: false
           type: string
         - name: born
           in: query
-          description: Only characters that were born in the specified year are included in the response.
+          description: Returns characters that were born within the specified year.
           required: false
           type: string
         - name: died
           in: query
-          description: Only characters that died in the specified year are included in the response.
+          description: Returns characters that died within the specified year.
           required: false
           type: string
         - name: isAlive
           in: query
-          description: Only characters with the specified culture are included in the response.
+          description: Returns characters that remain alive.
           required: false
           type: boolean
       responses:
@@ -222,14 +267,14 @@ paths:
     parameters:
       - name: character-id
         in: path
-        description: The id of the character to return.
+        description: The id of the character being requested.
         type: integer
         required: true
     get:
       tags:
         - characters
       summary: Get information about a specific character
-      description: Returns the character with the specified character-id. 
+      description: Returns data for the character with the specified character-id.
       operationId: findCharacterById
       produces:
         - application/json
@@ -245,7 +290,11 @@ paths:
       tags:
         - houses
       summary: Get a list of houses
-      description: Returns a list of houses.  Returns entire list of houses when no parameters are specified.
+      description: |
+        Returns data for each house in the database.  Returns data for a subset of houses when query parameters are included in the request.
+        ###
+        > By default, only the first ten houses in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
+        ###
       operationId: getHouses
       produces:
         - application/json
@@ -257,37 +306,37 @@ paths:
           type: string
         - name: region
           in: query
-          description: Only houses located in the specified region are included in the response.
+          description: Returns houses located within the specified region.
           required: false
           type: string
         - name: words
           in: query
-          description: Only houses with the specified words are included in the response.
+          description: Returns houses with the specified words (complete motto).
           required: false
           type: string
         - name: hasWords
           in: query
-          description: Only houses that have words associated with them are included in the response.
+          description: Returns houses that have a set of words associated with them.
           required: false
           type: boolean
         - name: hasTitle
           in: query
-          description: Only houses that have titles associated with them are included in the response.
+          description: Returns houses that have one or more titles associated with them.
           required: false
           type: boolean
         - name: hasSeats
           in: query
-          description: Only houses that have seats associated with them are included in the response.
+          description: Returns houses that have one or more seats associated with them.
           required: false
           type: boolean
         - name: hasDiedOut
           in: query
-          description: Only houses that have died out are included in the response.
+          description: Returns houses that have died out.
           required: false
           type: boolean
         - name: hasAncestralWeapons
           in: query
-          description: Only houses that have ancestral weapons associated with them are included in the response.
+          description: Returns houses that have ancestral weapons associated with them.
           required: false
           type: boolean
       responses:
@@ -301,14 +350,14 @@ paths:
     parameters:
       - name: house-id
         in: path
-        description: The id of the house to return.
+        description: The id of the house being requested.
         type: integer
         required: true
     get:
       tags:
         - houses
       summary: Get information about a specific house
-      description: Returns the house with the specified house-id. 
+      description: Returns data for the house with the specified house-id.
       operationId: findHouseById
       produces:
         - application/json
@@ -398,7 +447,7 @@ definitions:
         items:
           type: string
           format: url
-        description: An array of Character resource URLs that has had a POV-chapter in this book.
+        description: An array of Character resource URLs, one for each character that has a chapter within this book that is written from his/her point of view (POV).
         example: [http://www.anapioficeandfire.com/api/characters/148, ...]
   CharactersResponse:
     type: object
