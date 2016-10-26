@@ -1,5 +1,7 @@
-﻿Working:
+Working:
 	books?name=A%20Game%20of%20Thrones
+	http://anapioficeandfire.com/api/books?fromReleaseDate=2006-08-01T00:00:00
+   http://anapioficeandfire.com/api/books?toReleaseDate=2006-08-01T00:00:00
 	houses?region=The%20North
 	houses?words=As%20High%20as%20Honor
 	houses?name=House%20Amber
@@ -10,18 +12,23 @@
 	characters?name=Catelyn%20Stark
 	characters?died=In%20299%20AC,%20at%20the%20Twins
    characters?page=2&pageSize=10"
-	
 
 
 
-
-
-
-
-Not working:
-	houses?hasWords=false true doesn't work either
-	houses?hasSeats=false  true doesn't work either
-	characters?isAlive=true  unsure about result - must be paging of some sort - results have died=""
+Not working as expected:
+	houses?hasWords=false true result excludes houses with words="", false produces same results as true
+												confirmed that results don't include House 53 - which does not have a value for words.
+												also confirmed that using hasWords without =true responds with all houses.
+	houses?hasSeats=false  true result excludes houses with seats="", false produces same results as true
+											confirmed that results don't include House 1 - which does not have a value for seats.
+	houses?hasAncestralWeapons=false  true result excludes houses with ancestralWeapons="", false produces same results as true
+											confirmed that results don't include House 2 - which does not have a value for ancestralWeapons.
+	houses?hasTitles=false  true result excludes houses with title="", false produces same results as true
+											confirmed that results don't include Houses 1-6 - which don't have values for titles.
+	houses?hasDiedOut=false  true result excludes houses with diedOut="", false produces same results as true
+											confirmed that results don't include Houses 1-10 - which don't have values for diedOut.
+	characters?isAlive=true  same result whether true or false page=32, pageSize=50 - results have died=""
+										confirmed that results don't include Catelyn Stark - which as a value for died.
 
 
 **Characters

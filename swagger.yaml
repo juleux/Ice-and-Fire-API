@@ -5,7 +5,7 @@ host: anapioficeandfire.com
 basePath: 
 info:
   version: 1.0.0
-  title: API of Ice and Fire
+  title: An API of Ice and Fire
   summary: All of the data you've ever wanted from the universe of Ice And Fire.
 
   x-logo:
@@ -17,7 +17,7 @@ info:
     If you're interested in using a native implementation, please take a look at the [Libraries](#tag/libraries) section.
     
     # Authentication
-    An API of Ice And Fire is an open API. This means that no authentication is required to query the API for data. Since no authentication is required, the API only supports the `GET` request method.
+    The API of Ice And Fire is an open API. This means that no authentication is required to query the API for data. Since no authentication is required, the API only supports the `GET` request method.
     
     # Caching
     To help our server and your client we provide a few ways for you to use caching. Each API response includes the [ETag-header](https://en.wikipedia.org/wiki/HTTP_ETag) and the Last-Modified header. These headers can be used to ask our server if the data has changed or not. If the data has not changed you will receive an empty response body with a [304 Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1). If the data has changed you will receive a 200 with the updated data.
@@ -34,13 +34,13 @@ info:
     We advise you to use the above mentioned caching strategies, this will increase the speed of your client as well as save us bandwidth.
     
     # Pagination
-    An API of Ice And Fire provides a lot of data about the world of Westeros. To prevent our servers from getting cranky, the API will automatically paginate the responses. You will learn how to create requests with pagination parameters and consume the response.
+    An API of Ice and Fire contains a vast amount of data about the world of Westeros. To prevent our servers from getting cranky, the API will automatically paginate the responses. You will learn how to create requests with pagination parameters and consume the response.
     
     ### Things worth noting
     
     1. Information about the pagination is included in the [Link header](http://tools.ietf.org/html/rfc5988)
     2. Page numbering is 1-based
-    3. You can specify how many items you want to receive per page, the maximum is 50
+    3. You can specify how many items you want to receive per page, the maximum is 50.
     
     ### Constructing a request with pagination
     
@@ -133,10 +133,10 @@ tags:
       * [WesterosKit](https://github.com/fitomad/WesterosKit) by [Adolfo](https://github.com/fitomad)
   - name: licensing & copyright
     description: |
-      The *A Song of Ice and Fire* © series and its data is the property of George R.R. Martin. The data is used without claim of ownership.
-      All data has been collected from free sources such as *A Wiki of Ice and Fire*.
+      The *A Song of Ice and Fire* © series and its data is the property of George R.R. Martin. The Game of Thrones television series is the property of HBO ®. All data has been collected from free sources such as *A Wiki of Ice and Fire*. and is used without claim of ownership.
+      ###
       This project uses a BSD license.
-  
+      
 paths:
   /api:
     get:
@@ -170,17 +170,23 @@ paths:
       parameters:
         - name: name
           in: query
-          description: Returns books with the specified name.
+          description: |
+            Returns a single book with the specified name.  
+            Parameter is case-insensitive and must match the saved entry word for word. 
           required: false
           type: string
         - name: fromReleaseDate
           in: query
-          description: Returns books that were released after, or on, the specified date.
+          description: |
+            Returns books that were released on or after the specified date.  
+            *Release date* is in ISO 8601 format (1996-08-01T00:00:00). 
           required: false
           type: string
         - name: toReleaseDate
           in: query
-          description: Returns books that were released on or before the specified date.
+          description: |
+            Returns books that were released on or before the specified date.  
+            *Release date* is in ISO 8601 format (2014-06-17T00:00:00). 
           required: false
           type: string
       responses:
@@ -196,6 +202,7 @@ paths:
         in: path
         description: The id of the book being requested.
         type: integer
+        minimum: 1
         required: true
     get:
       tags:
@@ -228,7 +235,9 @@ paths:
       parameters:
         - name: name
           in: query
-          description: Returns characters with the specified name.
+          description: |
+            Returns a single character with the specified name.  
+            Parameter is case-insensitive and must match the saved entry word for word.  
           required: false
           type: string
         - name: gender
@@ -243,17 +252,23 @@ paths:
           type: string
         - name: born
           in: query
-          description: Returns characters that were born within the specified year.
+          description: |
+            Returns characters that were born within the specified year.  
+            Parameter is case-insensitive and must match the saved entry word for word. 
           required: false
           type: string
         - name: died
           in: query
-          description: Returns characters that died within the specified year.
+          description: |
+            Returns characters that died within the specified year.  
+            Parameter is case-insensitive and must match the saved entry word for word. 
           required: false
           type: string
         - name: isAlive
           in: query
-          description: Returns characters that remain alive.
+          description: |
+            When set to *true*, returns characters with died="".  
+            Note: *false* does not return characters that have died.
           required: false
           type: boolean
       responses:
@@ -269,6 +284,7 @@ paths:
         in: path
         description: The id of the character being requested.
         type: integer
+        minimum: 1
         required: true
     get:
       tags:
@@ -301,42 +317,58 @@ paths:
       parameters:
         - name: name
           in: query
-          description: Returns houses with the specified name.
+          description: |
+            Returns a single house with the specified name.  
+            Parameter is case-insensitive and must match the saved entry word for word.
           required: false
           type: string
         - name: region
           in: query
-          description: Returns houses located within the specified region.
+          description: |
+            Returns houses located within the specified region.  
+            Parameter is case-insensitive and must match the saved entry word for word.
           required: false
           type: string
         - name: words
           in: query
-          description: Returns houses with the specified words (complete motto).
+          description: |
+            Returns houses with the specified words.  
+            Parameter is case-insensitive and must match the saved entry word for word.
           required: false
           type: string
         - name: hasWords
           in: query
-          description: Returns houses that have a set of words associated with them.
+          description: |
+            When set to *true*, returns houses that have a set of words.  
+            Note: *false* does not return houses that lack a set of words.
           required: false
           type: boolean
-        - name: hasTitle
+        - name: hasTitles
           in: query
-          description: Returns houses that have one or more titles associated with them.
+          description: |
+            When set to *true*, returns houses that have one or more titles associated with them.  
+            Note: *false* does not return houses that lack titles.
           required: false
           type: boolean
         - name: hasSeats
           in: query
-          description: Returns houses that have one or more seats associated with them.
+          description: |
+            When set to *true*, returns houses that have one or more seats associated with them.  
+            Note: *false* does not return houses that lack seats.
           required: false
           type: boolean
         - name: hasDiedOut
           in: query
-          description: Returns houses that have died out.
+          description: |
+            When set to *true*, returns houses that have died out.  
+            Note: *false* does not return houses that persist.
           required: false
           type: boolean
         - name: hasAncestralWeapons
           in: query
-          description: Returns houses that have ancestral weapons associated with them.
+          description: |
+            When set to *true*, returns houses that have ancestral weapons.  
+            Note: *false* does not return houses that lack ancestral weapons.
           required: false
           type: boolean
       responses:
@@ -352,6 +384,7 @@ paths:
         in: path
         description: The id of the house being requested.
         type: integer
+        minimum: 1
         required: true
     get:
       tags:
@@ -375,17 +408,17 @@ definitions:
       books:
         type: string
         format: url
-        description: endpoint for books resource
+        description: The URL of the books resource.
         example: http://www.anapioficeandfire.com/api/books
       characters:
         type: string
         format: url
-        description: endpoint for characters resource
+        description: The URL of the characters resource.
         example: http://www.anapioficeandfire.com/api/characters
       houses:
         type: string
         format: url
-        description: endpoint for houses resource
+        description: The URL of the houses resource.
         example: http://www.anapioficeandfire.com/api/houses
   BooksResponse:
     type: object
@@ -393,7 +426,7 @@ definitions:
       url:
         type: string
         format: url
-        description: The hypermedia URL of this resource.
+        description: The URL of this resource.
         example: http://www.anapioficeandfire.com/api/books/1
       name:
         type: string
@@ -408,10 +441,11 @@ definitions:
         type: array
         items:
           type: string
-        description: An array of names of the authors that wrote this book.
+        description: The names of this book's authors.
         example: "George R. R. Martin"  
       numberOfPages:
         type: integer
+        minimum: 1
         description: The number of pages in this book.
         example: 694
       publisher:
@@ -420,11 +454,11 @@ definitions:
         example: Bantam Books
       country:
         type: string
-        description: The country which this book was published in.
+        description: The country in which this book was first published.
         example: United States
       mediaType:
         type: string
-        description: The type of media this book was released in. 
+        description: The media type of this book at the time of it's initial release. 
         enum:
           - Hardback
           - GraphicNovel
@@ -433,21 +467,21 @@ definitions:
       released:
         type: string
         format: date-time
-        description: The date, in ISO 8601 format, at which this book was released.
+        description: The date, in ISO 8601 format, when this book was released.
         example: '1996-08-01T00:00:00'
       characters:
         type: array
         items:
           type: string
           format: url
-        description: An array resource URLs containing the characters from this book.
+        description: The resource URLs of characters that appear in this book.
         example: [http://www.anapioficeandfire.com/api/characters/2, ...]
       povCharacters:
         type: array
         items:
           type: string
           format: url
-        description: An array of Character resource URLs, one for each character that has a chapter within this book that is written from his/her point of view (POV).
+        description: The resource URLs of characters that appear in one or more chapters written from their own point of view (pov).
         example: [http://www.anapioficeandfire.com/api/characters/148, ...]
   CharactersResponse:
     type: object
@@ -455,7 +489,7 @@ definitions:
       url:
         type: string
         format: url
-        description: The hypermedia URL of this resource.
+        description: The URL of this resource.
         example: http://www.anapioficeandfire.com/api/characters/823
       name:
         type: string
@@ -475,71 +509,71 @@ definitions:
         example: Valemen  
       born:
         type: string
-        description: The year that this person was born.
+        description: The year that this character was born.
         example: In 268 AC, at the Fingers
       died:
         type: string
-        description: The year that this person died.
+        description: The year that this character died.
         example: ""
       titles:
         type: array
         items:
           type: string
-        description: The titles that this character holds.
+        description: Titles held by this character.
         example: [Master of coin (formerly),Lord Paramount of the Trident, Lord of Harrenhal, Lord Protector of the Vale]
       aliases:
         type: array
         items:
           type: string
-        description: The aliases that this character goes by.
+        description: Aliases used by this character.
         example: [Littlefinger]
       father:
         type: string
         format: url
-        description: The character resource URL of this character''s father.
+        description: The resource URL of this character's father.
         example: ""
       mother:
         type: string
         format: url
-        description: The character resource URL of this character''s mother.
+        description: The resource URL of this character's mother.
         example: ""
       spouse:
         type: string
         format: url
-        description: The character resource URL of this character''s spouse.
+        description: The resource URL of this character's spouse.
         example: http://www.anapioficeandfire.com/api/characters/688
       allegiances:
         type: array
         items:
           type: string
           format: url
-        description: An array of House resource URLs that this character is loyal to.
+        description: The resource URLs of houses that this character is loyal to.
         example: [http://www.anapioficeandfire.com/api/houses/10, http://www.anapioficeandfire.com/api/houses/11]
       books:
         type: array
         items:
           type: string
           format: url
-        description: An array of Book resource URLs that this character has been in.
+        description: The resource URLs of books in which this character appears.
         example: [http://www.anapioficeandfire.com/api/books/1, ...]
       povBooks:
         type: array
         items:
           type: string
           format: url
-        description: An array of Book resource URLs that this character has had a POV-chapter in.
+        description: The resource URLs of books containing chapters written from this character's point-of-view.
         example: []
       tvSeries:
         type: array
         items:
           type: string
-        description: An array containing the names of Game of Thrones seasons that this character has appeared in.
+        description: The names of each *Game Of Thrones* season in which this character appears.
         example: [Season 1, Season 2, Season 3, Season 4, Season 5]
       playedBy:
         type: array
         items:
           type: string
-        description: An array containing the names of actors that have played this character in the TV show Game Of Thrones.
+        description: The names of actors that have played this character in the HBO® series *Game Of Thrones*.
         example: [Aidan Gillen]
   HousesResponse:
     type: object
@@ -547,7 +581,7 @@ definitions:
       url:
         type: string
         format: url
-        description: The hypermedia URL of this resource.
+        description: The URL of this resource.
         example: http://www.anapioficeandfire.com/api/houses/10
       name:
         type: string
@@ -555,7 +589,7 @@ definitions:
         example: House Baelish of Harrenhal
       region:
         type: string
-        description: The region that this house resides in.
+        description: The region in which this house is located.
         example: The Riverland
       coatOfArms:
         type: string
@@ -563,34 +597,34 @@ definitions:
         example: A field of silver mockingbirds, on a green field(Vert, semé of mockingbirds argent)  
       words:
         type: string
-        description: The words of this house.
+        description: The words of this house. Words are simply a motto that members of the house aspire to live by.  
         example: ""
       titles:
         type: array
         items:
           type: string
-        description: The titles that this house holds.
+        description: Titles held by this house.
         example: [Lord Paramount of the Trident, Lord of Harrenhal]
       seats:
         type: array
         items:
           type: string
-        description: The seats that this house holds.
+        description: Seats held by this house.
         example: [Harrenhal]
       currentLord:
         type: string
         format: url
-        description: The Character resource URL of this house''s current lord.
+        description: The resource URL of the character that serves as this house's current lord.
         example: http://www.anapioficeandfire.com/api/characters/823
       heir:
         type: string
         format: url
-        description: The Character resource URL of this house''s heir.
+        description: The resource URL of the character that stands to inherit this house.
         example: ""
       overlord:
         type: string
         format: url
-        description: The House resource URL that this house answers to.
+        description: The resource URL of the house that this house answers to.
         example: http://www.anapioficeandfire.com/api/houses/16
       founded:
         type: string
@@ -599,7 +633,7 @@ definitions:
       founder:
         type: string
         format: url
-        description: The Character resource URL that founded this house.
+        description: The resource URL of the character that founded this house.
         example:  http://www.anapioficeandfire.com/api/characters/823
       diedOut:
         type: string
@@ -609,20 +643,20 @@ definitions:
         type: array
         items:
           type: string
-        description: An array of names of the noteworthy weapons that this house owns.
+        description: The names of noteworthy weapons owned by this house.
         example: []
       cadetBranches:
         type: array
         items:
           type: string
           format: url
-        description: An array of House resource URLs that was founded from this house.
+        description: The resource URLs of houses that were founded from this house.
         example: []
       swornMembers:
         type: array
         items:
           type: string
           format: url
-        description: An array of Character resource URLs that are sworn to this house.
+        description: The resource URLs of characters that are sworn to this house.
         example: [http://www.anapioficeandfire.com/api/characters/651,   http://www.anapioficeandfire.com/api/characters/804, http://www.anapioficeandfire.com/api/characters/823, http://www.anapioficeandfire.com/api/characters/957, http://www.anapioficeandfire.com/api/characters/970]
 #
