@@ -51,16 +51,15 @@ info:
     ```json
     $ curl -I  "http://www.anapioficeandfire.com/api/characters?page=1&pageSize=10"
     ```
-    #### Here's the link header in the response:
+    ##### Here's the Link parameter in the response header:
     ```json
     Link: <http://www.anapioficeandfire.com/api/characters?page=2&pageSize=10>; rel="next",
     <http://www.anapioficeandfire.com/api/characters?page=1&pageSize=10>; rel="first",  
     <http://www.anapioficeandfire.com/api/characters?page=214&pageSize=10>; rel="last"
     ```
     
-    #### The possible values in the link response header are:
-    
-    | Name     | Description                              |
+    ##### Possible values for `rel` in the Link parameter are:
+    | Value    | Description                              |
     | :------- |:-----------------------------------------|
     | next     | The link to the next page of results.    |
     | prev     | The link to the previous page of results.|
@@ -84,23 +83,6 @@ info:
     ```json
     application/vnd.anapioficeandfire+json; version=1
     ```
-#    # Libraries
-#    There are a number of helper libraries you can use to consume the API of Ice and Fire.
-#    ###
-#    #### Elixir
-#    * [maester](https://github.com/sotojuan/maester) by [Juan Soto](https://github.com/sotojuan)
-#    #### GraphQL
-#    * [iceandfire-graphql](https://github.com/afram/iceandfire-graphql) by [Marwan Butrous](https://github.com/afram)
-#    #### Node
-#    * [asoiaf-api](https://github.com/arbazsiddiqui/A-song-of-ice-and-fire-API) by [Arbaz Siddqiui](https://github.com/arbazsiddiqui)
-#    * [node-api-iceandfire](https://github.com/alexwebb2/node-api-iceandfire) by Alex Webb
-#    #### Python
-#    * [anapioficeandfire-python](https://github.com/joakimskoog/anapioficeandfire-python) by the author of An API of Ice And Fire, [Joakim Skoog](https://github.com/joakimskoog)
-#    #### Swift
-#    * [IceAndFireKit](https://github.com/murphb52/IceAndFireKit) by [Brian Murphy](https://github.com/murphb52)
-#    * [IceAndFireLoader](https://github.com/ujell/IceAndFireLoader) by [Yucel Uzun](https://github.com/ujell)
-#    * [WesterosKit](https://github.com/fitomad/WesterosKit) by [Adolfo](https://github.com/fitomad)
-    
 #	 
 tags:
   - name: API Root
@@ -114,6 +96,16 @@ tags:
     description: The API contains information on 2000+ characters.
   - name: houses
     description: The API contains information on 400+ houses.
+  - name: errors
+    description: |
+      Error codes returned by the API include:	 
+      ####  
+      | Error Code    | Description                              |
+      | :------------:|:-----------------------------------------|
+      | 304           | The data you requested has not changed since you last requested it.  See [Caching](#section/Caching).    |
+      | 403           | Daily limit of 20000 requests has been reached. Server will deny subsequent requests for 24 hours.  See [Rate Limiting](#section/Rate-Limiting). |
+      | 4XX           | Request contains invalid data and cannot be processed by the server.    |
+      
   - name: libraries
     description: |
       There are a number of helper libraries you can use to consume the API of Ice and Fire.
@@ -133,7 +125,7 @@ tags:
       * [WesterosKit](https://github.com/fitomad/WesterosKit) by [Adolfo](https://github.com/fitomad)
   - name: licensing & copyright
     description: |
-      The *A Song of Ice and Fire* © series and its data is the property of George R.R. Martin. The Game of Thrones television series is the property of HBO ®. All data has been collected from free sources such as *A Wiki of Ice and Fire*. and is used without claim of ownership.
+      The *A Song of Ice and Fire* © series and its data is the property of George R.R. Martin. The *Game of Thrones* television series is the property of HBO ®. API data was collected from free sources such as [*A Wiki of Ice and Fire*](http://awoiaf.westeros.org/index.php/Main_Page) and is used without claim of ownership.
       ###
       This project uses a BSD license.
       
@@ -149,11 +141,10 @@ paths:
         - application/json
       responses:
         '200':
-          description: successful operation
+          description: OK
           schema:
             $ref: '#/definitions/RootResponse'
-        '400':
-          description: Invalid status value
+        
   /api/books:
     get:
       tags:
@@ -164,6 +155,15 @@ paths:
         ###
         > By default, only the first ten books in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
         ###
+        ##### Sample Requests:
+            
+        | Endpoint                                      | Description                                           |
+        | :---------------------------------------------|:------------------------------------------------------|
+        | /api/books?name=A%20Game%20of%20Thrones       | Returns the book 'A Game of Thrones'                  |
+        | /api/books?fromReleaseDate=2001-01-01T00:00:00| Returns books released after 2000                     |		  
+        | /api/books?toReleaseDate=2006-01-01T00:00:00  | Returns books released before 2006                    |
+        | /api/books?page=2&pageSize=10                 | Returns second page of books starting with book-id=11 |
+
       operationId: getBooks
       produces:
         - application/json
@@ -189,13 +189,28 @@ paths:
             *Release date* is in ISO 8601 format (2014-06-17T00:00:00). 
           required: false
           type: string
+        - name: page
+          in: query
+          description: |
+            Returns results from the specified page.
+            Often used in conjunction with *pageSize*.
+          required: false
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: query
+          description: |
+            The number of results to return per page. 
+          required: false
+          type: integer
+          minimum: 1
+          default: 10
       responses:
         '200':
-          description: successful operation
+          description: OK
           schema:
-            $ref: '#/definitions/BooksResponse'
-        '400':
-          description: Invalid status value
+            $ref: '#/definitions/BooksResponseArray'
+      
   /api/books/{book-id}:
     parameters:
       - name: book-id
@@ -214,11 +229,10 @@ paths:
         - application/json
       responses:
         '200':
-          description: successful operation
+          description: OK
           schema:
-            $ref: '#/definitions/BooksResponse'
-        '400':
-          description: Invalid status value
+            $ref: '#/definitions/BookResponse'
+      
   /api/characters:
     get:
       tags:
@@ -229,6 +243,15 @@ paths:
         ###
         > By default, only the first ten characters in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
         ###
+        ##### Sample Requests:
+            
+        | Endpoint                                          | Description                                             |
+        | :-------------------------------------------------|:--------------------------------------------------------|
+        | /api/characters?name=Catelyn%20Stark              | Returns the character named 'Catelyn Stark'             |
+        | /api/characters?gender=Female                     | Returns the first ten female characters                 |		  
+        | /api/characters?gender=Female&page=2&pageSize=10  | Returns the 2nd group of ten female characters          |
+        | /api/characters?born=In%20283%20AC                | Returns characters born 'In 283 AC'                     |
+        | /api/characters?isAlive=true                      | Returns the first ten characters with no recorded death |
       operationId: getCharacters
       produces:
         - application/json
@@ -253,15 +276,15 @@ paths:
         - name: born
           in: query
           description: |
-            Returns characters that were born within the specified year.  
-            Parameter is case-insensitive and must match the saved entry word for word. 
+            Returns characters that were born at the specified time and place.   
+            Parameter is case-insensitive and must match the saved entry word for word.  
           required: false
           type: string
         - name: died
           in: query
           description: |
-            Returns characters that died within the specified year.  
-            Parameter is case-insensitive and must match the saved entry word for word. 
+            Returns characters that died at the specified time and place.  
+            Parameter is case-insensitive and must match the saved entry word for word.  
           required: false
           type: string
         - name: isAlive
@@ -271,13 +294,28 @@ paths:
             Note: *false* does not return characters that have died.
           required: false
           type: boolean
+        - name: page
+          in: query
+          description: |
+            Returns results from the specified page.
+            Often used in conjunction with *pageSize*.
+          required: false
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: query
+          description: |
+            The number of results to return per page. 
+          required: false
+          type: integer
+          minimum: 1
+          default: 10
       responses:
         '200':
-          description: successful operation
+          description: OK
           schema:
-            $ref: '#/definitions/CharactersResponse'
-        '400':
-          description: Invalid status value
+            $ref: '#/definitions/CharactersResponseArray'
+      
   /api/characters/{character-id}:
     parameters:
       - name: character-id
@@ -296,11 +334,10 @@ paths:
         - application/json
       responses:
         '200':
-          description: successful operation
+          description: OK
           schema:
-            $ref: '#/definitions/CharactersResponse'
-        '400':
-          description: Invalid status value
+            $ref: '#/definitions/CharacterResponse'
+      
   /api/houses:
     get:
       tags:
@@ -311,6 +348,16 @@ paths:
         ###
         > By default, only the first ten houses in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
         ###
+        ##### Sample Requests:
+            
+        | Endpoint                                      | Description                                          |
+        | :---------------------------------------------|:-----------------------------------------------------|
+        | /api/houses?name=House%20Amber                | Returns the house named 'House Amber'                |
+        | /api/houses?region=The%20North                | Returns houses located in 'The North'                |		  
+        | /api/houses?words=As%20High%20as%20Honor      | Returns the house with the words 'As High as Honor'  |
+        | /api/houses?hasTitles=true&pageSize=30        | Returns the first 30 houses with titles              |
+        | /api/houses?hasTitles=true&page=2&pageSize=30 | Returns the 2nd group of 30 houses with titles       |
+        
       operationId: getHouses
       produces:
         - application/json
@@ -371,13 +418,28 @@ paths:
             Note: *false* does not return houses that lack ancestral weapons.
           required: false
           type: boolean
+        - name: page
+          in: query
+          description: |
+            Returns results from the specified page.
+            Often used in conjunction with *pageSize*.
+          required: false
+          type: integer
+          minimum: 1
+        - name: pageSize
+          in: query
+          description: |
+            The number of results to return per page. 
+          required: false
+          type: integer
+          minimum: 1
+          default: 10
       responses:
         '200':
-          description: successful operation
+          description: OK
           schema:
-            $ref: '#/definitions/HousesResponse'
-        '400':
-          description: Invalid status value
+            $ref: '#/definitions/HousesResponseArray'
+      
   /api/houses/{house-id}:
     parameters:
       - name: house-id
@@ -396,11 +458,10 @@ paths:
         - application/json
       responses:
         '200':
-          description: successful operation
+          description: OK
           schema:
-            $ref: '#/definitions/HousesResponse'
-        '400':
-          description: Invalid status value
+            $ref: '#/definitions/HouseResponse'
+      
 definitions:
   RootResponse:
     type: object
@@ -420,6 +481,14 @@ definitions:
         format: url
         description: The URL of the houses resource.
         example: http://www.anapioficeandfire.com/api/houses
+#Books
+#BooksResponseArray references BooksResponse - response consists of an array of book objects
+#BookResponse applies to response with single book object
+#Attempts to combine BooksResponse with BookResponse failed (bug?)	
+  BooksResponseArray:
+    type: array
+    items:
+      $ref: '#/definitions/BooksResponse'
   BooksResponse:
     type: object
     properties:
@@ -445,7 +514,6 @@ definitions:
         example: "George R. R. Martin"  
       numberOfPages:
         type: integer
-        minimum: 1
         description: The number of pages in this book.
         example: 694
       publisher:
@@ -483,6 +551,76 @@ definitions:
           format: url
         description: The resource URLs of characters that appear in one or more chapters written from their own point of view (pov).
         example: [http://www.anapioficeandfire.com/api/characters/148, ...]
+  BookResponse:
+    type: object
+    properties:
+      url:
+        type: string
+        format: url
+        description: The URL of this resource.
+        example: http://www.anapioficeandfire.com/api/books/1
+      name:
+        type: string
+        description: The name of this book.
+        example: A Game of Thrones
+      isbn:
+        type: string
+        format: 'ISBN-13'
+        description: The International Standard Book Number (isbn) that uniquely identifies this book.
+        example: 978-055310354
+      authors:
+        type: array
+        items:
+          type: string
+        description: The names of this book's authors.
+        example: "George R. R. Martin"  
+      numberOfPages:
+        type: integer
+        description: The number of pages in this book.
+        example: 694
+      publisher:
+        type: string
+        description: The company that published this book.
+        example: Bantam Books
+      country:
+        type: string
+        description: The country in which this book was first published.
+        example: United States
+      mediaType:
+        type: string
+        description: The media type of this book at the time of it's initial release. 
+        enum:
+          - Hardback
+          - GraphicNovel
+          - Paperback
+        example: Hardcover
+      released:
+        type: string
+        format: date-time
+        description: The date, in ISO 8601 format, when this book was released.
+        example: '1996-08-01T00:00:00'
+      characters:
+        type: array
+        items:
+          type: string
+          format: url
+        description: The resource URLs of characters that appear in this book.
+        example: [http://www.anapioficeandfire.com/api/characters/2, ...]
+      povCharacters:
+        type: array
+        items:
+          type: string
+          format: url
+        description: The resource URLs of characters that appear in one or more chapters written from their own point of view (pov).
+        example: [http://www.anapioficeandfire.com/api/characters/148, ...]
+#Characters
+#CharactersResponseArray references CharactersResponse
+#CharacterResponse applies to response with single character object
+#Attempts to combine CharactersResponse with CharacterResponse failed (bug?)		  
+  CharactersResponseArray:
+    type: array
+    items:
+      $ref: '#/definitions/CharactersResponse'
   CharactersResponse:
     type: object
     properties:
@@ -509,11 +647,11 @@ definitions:
         example: Valemen  
       born:
         type: string
-        description: The year that this character was born.
+        description: The timeframe in which this character was born and his/her birthplace if available.
         example: In 268 AC, at the Fingers
       died:
         type: string
-        description: The year that this character died.
+        description: The timeframe in which this character died and his/her place of death if available.
         example: ""
       titles:
         type: array
@@ -575,6 +713,106 @@ definitions:
           type: string
         description: The names of actors that have played this character in the HBO® series *Game Of Thrones*.
         example: [Aidan Gillen]
+  CharacterResponse:
+    type: object
+    properties:
+      url:
+        type: string
+        format: url
+        description: The URL of this resource.
+        example: http://www.anapioficeandfire.com/api/characters/823
+      name:
+        type: string
+        description: The name of this character.
+        example: Petyr Baelish
+      gender:
+        type: string
+        description: The gender of this character. 
+        enum:
+          - Female
+          - Male
+          - Unknown
+        example: Male
+      culture:
+        type: string
+        description: The culture that this character belongs to.
+        example: Valemen  
+      born:
+        type: string
+        description: The timeframe in which this character was born and his/her birthplace if available.
+        example: In 268 AC, at the Fingers
+      died:
+        type: string
+        description: The timeframe in which this character died and his/her place of death if available.
+        example: ""
+      titles:
+        type: array
+        items:
+          type: string
+        description: Titles held by this character.
+        example: [Master of coin (formerly),Lord Paramount of the Trident, Lord of Harrenhal, Lord Protector of the Vale]
+      aliases:
+        type: array
+        items:
+          type: string
+        description: Aliases used by this character.
+        example: [Littlefinger]
+      father:
+        type: string
+        format: url
+        description: The resource URL of this character's father.
+        example: ""
+      mother:
+        type: string
+        format: url
+        description: The resource URL of this character's mother.
+        example: ""
+      spouse:
+        type: string
+        format: url
+        description: The resource URL of this character's spouse.
+        example: http://www.anapioficeandfire.com/api/characters/688
+      allegiances:
+        type: array
+        items:
+          type: string
+          format: url
+        description: The resource URLs of houses that this character is loyal to.
+        example: [http://www.anapioficeandfire.com/api/houses/10, http://www.anapioficeandfire.com/api/houses/11]
+      books:
+        type: array
+        items:
+          type: string
+          format: url
+        description: The resource URLs of books in which this character appears.
+        example: [http://www.anapioficeandfire.com/api/books/1, ...]
+      povBooks:
+        type: array
+        items:
+          type: string
+          format: url
+        description: The resource URLs of books containing chapters written from this character's point-of-view.
+        example: []
+      tvSeries:
+        type: array
+        items:
+          type: string
+        description: The names of each *Game Of Thrones* season in which this character appears.
+        example: [Season 1, Season 2, Season 3, Season 4, Season 5]
+      playedBy:
+        type: array
+        items:
+          type: string
+        description: The names of actors that have played this character in the HBO® series *Game Of Thrones*.
+        example: [Aidan Gillen]
+#Houses
+#HousesResponseArray references HousesResponse
+#HouseResponse applies to response with single house object
+#Attempts to combine HousesResponse with HouseResponse failed (bug?)
+  HousesResponseArray:
+    type: array
+    items:
+      $ref: '#/definitions/HousesResponse'
   HousesResponse:
     type: object
     properties:
@@ -659,4 +897,88 @@ definitions:
           format: url
         description: The resource URLs of characters that are sworn to this house.
         example: [http://www.anapioficeandfire.com/api/characters/651,   http://www.anapioficeandfire.com/api/characters/804, http://www.anapioficeandfire.com/api/characters/823, http://www.anapioficeandfire.com/api/characters/957, http://www.anapioficeandfire.com/api/characters/970]
+  HouseResponse:
+    type: object
+    properties:
+      url:
+        type: string
+        format: url
+        description: The URL of this resource.
+        example: http://www.anapioficeandfire.com/api/houses/10
+      name:
+        type: string
+        description: The name of this house.
+        example: House Baelish of Harrenhal
+      region:
+        type: string
+        description: The region in which this house is located.
+        example: The Riverland
+      coatOfArms:
+        type: string
+        description: Text describing the coat of arms of this house.
+        example: A field of silver mockingbirds, on a green field(Vert, semé of mockingbirds argent)  
+      words:
+        type: string
+        description: The words of this house. Words are simply a motto that members of the house aspire to live by.  
+        example: ""
+      titles:
+        type: array
+        items:
+          type: string
+        description: Titles held by this house.
+        example: [Lord Paramount of the Trident, Lord of Harrenhal]
+      seats:
+        type: array
+        items:
+          type: string
+        description: Seats held by this house.
+        example: [Harrenhal]
+      currentLord:
+        type: string
+        format: url
+        description: The resource URL of the character that serves as this house's current lord.
+        example: http://www.anapioficeandfire.com/api/characters/823
+      heir:
+        type: string
+        format: url
+        description: The resource URL of the character that stands to inherit this house.
+        example: ""
+      overlord:
+        type: string
+        format: url
+        description: The resource URL of the house that this house answers to.
+        example: http://www.anapioficeandfire.com/api/houses/16
+      founded:
+        type: string
+        description: The year that this house was founded.
+        example: 299 AC
+      founder:
+        type: string
+        format: url
+        description: The resource URL of the character that founded this house.
+        example:  http://www.anapioficeandfire.com/api/characters/823
+      diedOut:
+        type: string
+        description: The year that this house died out.
+        example: ""
+      ancestralWeapons:
+        type: array
+        items:
+          type: string
+        description: The names of noteworthy weapons owned by this house.
+        example: []
+      cadetBranches:
+        type: array
+        items:
+          type: string
+          format: url
+        description: The resource URLs of houses that were founded from this house.
+        example: []
+      swornMembers:
+        type: array
+        items:
+          type: string
+          format: url
+        description: The resource URLs of characters that are sworn to this house.
+        example: [http://www.anapioficeandfire.com/api/characters/651,   http://www.anapioficeandfire.com/api/characters/804, http://www.anapioficeandfire.com/api/characters/823, http://www.anapioficeandfire.com/api/characters/957, http://www.anapioficeandfire.com/api/characters/970]		  
 #
