@@ -151,7 +151,8 @@ paths:
         - books
       summary: Get a list of books
       description: |
-        Returns data for every book in the database.  Returns data for a subset of books when query parameters are included in the request.
+        Returns data for each book in the result set.  Result set includes all books by default.  
+        Result set can be filtered by adding query parameters to the request. 
         ###
         > By default, only the first ten books in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
         ###
@@ -239,7 +240,8 @@ paths:
         - characters
       summary: Get a list of characters
       description: |
-        Returns data for each character in the database.  Returns data for a subset of characters when query parameters are included in the request.
+        Returns data for each character in the result set.  Result set includes all characters by default.  
+        Result set can be filtered by adding query parameters to the request. 
         ###
         > By default, only the first ten characters in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
         ###
@@ -344,7 +346,8 @@ paths:
         - houses
       summary: Get a list of houses
       description: |
-        Returns data for each house in the database.  Returns data for a subset of houses when query parameters are included in the request.
+        Returns data for each house in the result set.  Result set includes all houses by default.  
+        Result set can be filtered by adding query parameters to the request. 
         ###
         > By default, only the first ten houses in the result set are returned.  To retrieve additional results, include `page` and `pageSize` query parameters in your request, for example: `?page=2&pageSize=10`.  Refer to [Pagination](#section/Pagination) for more information.
         ###
