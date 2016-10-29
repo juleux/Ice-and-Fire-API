@@ -41,7 +41,7 @@ info:
     The API of Ice And Fire is an open API. This means that no authentication is required to query the API for data. For this reason, the API only supports the `GET` request method.
     
     # Caching
-    To help our server and your client we provide a few ways for you to use caching. Each API response header contains both the [ETag-field](https://en.wikipedia.org/wiki/HTTP_ETag) and the Last-Modified field. You can use these header fields in your application to ask our server if the data you are requesting has changed since the last request. If the data has not changed, the server will return an empty response body with a [304 Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1) error. If the data has changed, the server wil return the updated data along with a `200 OK` status code. 
+    Caching improves performance by reducing network traffic between client and server.  Our API supports two approaches to caching. Each API response header contains both the [ETag-field](https://en.wikipedia.org/wiki/HTTP_ETag) and the Last-Modified field. You can use these header fields in your application to ask our server if the data you are requesting has changed since the last request. If the data has not changed, the server will return an empty response body with a [304 Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1) error code. If the data has changed, the server wil return the updated data along with a `200 OK` status code. 
     
     ##### To use the ETag, include the following statement in your request header:
     
@@ -62,7 +62,7 @@ info:
     1. Page numbering is 1-based
     2. Pagination requests are made using the query parameters `page` and `pageSize`.
     3. To make page retrieval easier, the API returns links to relevant pages in the [response header](http://tools.ietf.org/html/rfc5988).
-    4. When no pagination parameters are present in a request, the API returns the first page of ten results by default. 
+    4. When no pagination parameters are present in a request, the API returns the first page of ten results by default.
     
     ###
     ### Using query parameters to construct a request with pagination
@@ -74,17 +74,18 @@ info:
     | Combined query                                     | ?page=4&pageSize=30|
     
     ###
-    ### Accessing page links
+    ### Accessing page links in the response header
     
-    Let's make a request for the first page of characters with a page size of 10. Since we're only interested in retrieving pagination information from the header, add `-I` parameter.
+    The `Link` field comes into play for requests that have the potential to return multiple objects.  Specifically, any request for books, characters, or houses that does not specify a resource-id.  The link field contains a set of URLs which point to the other pages in the result set relative to the current page present in the response.  By parsing the response header, you can use these URLs to navigate to other pages within the result set.  An example request and response is shown below.  The `-I` flag is in use, enabling us to examine the header of the response, rather than the body.  
     
+    ##### Example request:
     ```json
     $ curl -I  "http://www.anapioficeandfire.com/api/characters?page=1&pageSize=10"
     ```
     ##### Example of the Link field as it appears within the response header:
     ```json
     Link: <http://www.anapioficeandfire.com/api/characters?page=2&pageSize=10>; rel="next",
-    <http://www.anapioficeandfire.com/api/characters?page=1&pageSize=10>; rel="first",  
+    <http://www.anapioficeandfire.com/api/characters?page=1&pageSize=10>; rel="first", 
     <http://www.anapioficeandfire.com/api/characters?page=214&pageSize=10>; rel="last"
     ```
     
@@ -96,17 +97,15 @@ info:
     | first    | The link to the first page of results.   |
     | last     | The link to the last page of results.    |
     
-    These links can then be used to navigate to other pages within the result set.
+    At a minimum, the Link field contains URLs for the first and last pages of the result set.  URLs for the previous and next pages are included as applicable.
     
     # Rate Limiting
-    To prevent malicious usage of our API we limit the number of requests that can be made in a 24 hour period to 20,000.  You can avoid reaching this limit by implementing proper caching strategies in your client application. Should the limit be reached, the API will generate a [403 Forbidden](https://en.wikipedia.org/wiki/HTTP_403) error in response to any additional requests it receives within the 24 hour time period.
-    
-    
+    To prevent malicious usage of our API, we limit the number of requests that can be made in a 24 hour period to 20,000.  You can avoid reaching this limit by implementing proper caching strategies in your client application. Should the limit be reached, the API will generate a [403 Forbidden](https://en.wikipedia.org/wiki/HTTP_403) error in response to any additional requests it receives within the 24 hour time period.
     
     # Versioning
-    Through the use of custom media types, this API enables you to choose which version of the data you want to query. To specify a version, modify the Accept field within your request header as shown below.  Note that media types are specific to resources, which enable them to change independently from one another.
+    Through the use of custom media types, this API enables you to choose which version of the data you want to query. To specify a version, modify the `Accept` field within your request header as shown below.  Note that media types are specific to resources, which enable them to change independently from one another.
     ###
-    To specify a version, add this type statement to the Accept field:
+    To specify a version, add this 'type' statement to the Accept field:
     ```json
     application/vnd.anapioficeandfire+json; version=1
     ```
@@ -121,19 +120,19 @@ tags:
       $ curl "http://www.anapioficeandfire.com/api"
       ```
   - name: books
-    description: The API currently contains data on all five published novels in the *A Song of Ice and Fire*  © series.  It also references additional material in the form of novellas.  
+    description: The API currently contains data on all five published novels in the *A Song of Ice and Fire*  © series.  It also references additional material in the form of novellas.
   - name: characters
     description: The API contains information on over 2000 fictional characters that inhabit the Ice and Fire universe.
   - name: houses
     description: The API contains information on the over 400 houses that govern the population of Westeros.
   - name: errors
     description: |
-      Error codes returned by the API include:	 
+      Error codes returned by the API include:
       ####  
       | Error Code    | Description                              |
       | :------------:|:-----------------------------------------|
       | 304           | The data you requested has not changed since you last requested it.  See [Caching](#section/Caching).    |
-      | 403           | Daily limit of 20000 requests has been reached. Server will deny subsequent requests for 24 hours.  See [Rate Limiting](#section/Rate-Limiting). |
+      | 403           | Daily limit of 20,000 requests has been reached. Server will deny subsequent requests for 24 hours.  See [Rate Limiting](#section/Rate-Limiting). |
       | 4XX           | Request is invalid and cannot be processed by the server.    |
       
   - name: libraries
@@ -193,7 +192,7 @@ paths:
         | Endpoint                                      | Description                                           |
         | :---------------------------------------------|:------------------------------------------------------|
         | /api/books?name=A%20Game%20of%20Thrones       | Returns the book 'A Game of Thrones'                  |
-        | /api/books?fromReleaseDate=2001-01-01T00:00:00| Returns books released after 2000                     |		  
+        | /api/books?fromReleaseDate=2001-01-01T00:00:00| Returns books released after 2000                     |
         | /api/books?toReleaseDate=2006-01-01T00:00:00  | Returns books released before 2006                    |
         | /api/books?page=2&pageSize=10                 | Returns second page of books starting with book-id=11 |
 
@@ -284,7 +283,7 @@ paths:
         | Endpoint                                          | Description                                             |
         | :-------------------------------------------------|:--------------------------------------------------------|
         | /api/characters?name=Catelyn%20Stark              | Returns the character named 'Catelyn Stark'             |
-        | /api/characters?gender=Female                     | Returns the first ten female characters                 |		  
+        | /api/characters?gender=Female                     | Returns the first ten female characters                 |
         | /api/characters?gender=Female&page=2&pageSize=10  | Returns the 2nd group of ten female characters          |
         | /api/characters?born=In%20283%20AC                | Returns characters born 'In 283 AC'                     |
         | /api/characters?isAlive=true                      | Returns the first ten characters with no recorded death |
@@ -304,6 +303,10 @@ paths:
           description: Returns characters with the specified gender.
           required: false
           type: string
+          enum:
+            - Male
+            - Female
+            - Unknown
         - name: culture
           in: query
           description: Returns characters with the specified culture.
@@ -397,7 +400,7 @@ paths:
         | Endpoint                                      | Description                                          |
         | :---------------------------------------------|:-----------------------------------------------------|
         | /api/houses?name=House%20Amber                | Returns the house named 'House Amber'                |
-        | /api/houses?region=The%20North                | Returns houses located in 'The North'                |		  
+        | /api/houses?region=The%20North                | Returns houses located in 'The North'                |
         | /api/houses?words=As%20High%20as%20Honor      | Returns the house with the words 'As High as Honor'  |
         | /api/houses?hasTitles=true&pageSize=30        | Returns the first 30 houses with titles              |
         | /api/houses?hasTitles=true&page=2&pageSize=30 | Returns the 2nd group of 30 houses with titles       |
@@ -530,7 +533,7 @@ definitions:
 #Books
 #BooksResponseArray references BooksResponse - response consists of an array of book objects
 #BookResponse applies to response with single book object
-#Attempts to combine BooksResponse with BookResponse failed (bug?)	
+#Attempts to combine BooksResponse with BookResponse failed (bug?)
   BooksResponseArray:
     type: array
     items:
@@ -1026,5 +1029,5 @@ definitions:
           type: string
           format: url
         description: The resource URLs of characters that are sworn to this house.
-        example: [http://www.anapioficeandfire.com/api/characters/651,   http://www.anapioficeandfire.com/api/characters/804, http://www.anapioficeandfire.com/api/characters/823, http://www.anapioficeandfire.com/api/characters/957, http://www.anapioficeandfire.com/api/characters/970]		  
+        example: [http://www.anapioficeandfire.com/api/characters/651,   http://www.anapioficeandfire.com/api/characters/804, http://www.anapioficeandfire.com/api/characters/823, http://www.anapioficeandfire.com/api/characters/957, http://www.anapioficeandfire.com/api/characters/970]
 #
