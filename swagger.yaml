@@ -9,56 +9,86 @@ info:
   summary: All of the data you've ever wanted from the universe of Ice And Fire.
 
   x-logo:
-    url: 'images/fire_and_ice_rev.jpg'
+    url: 'images/Fire_and_ice_rev.jpg'
   description: |
     # Overview
-    This documentation will help you familiarize yourself with the API and how to consume the different resources that are available. The documentation provides all information needed to get started and it also has educational examples for all resources.
+    Using the API of Ice and Fire, you can build applications that enable users to search a fan-compiled database of information describing the fictional world of Westeros.
+    This guide explains how to get started with the API, describes each of the available resources, and provides example code.  
+
+    The API of Ice and Fire is a RESTish Web API with a base url of:
+    ###
+    [$ curl "http://www.anapioficeandfire.com/api"](http://www.anapioficeandfire.com/api)
+    ###
+    This base URL, referred to here as API root, exposes a list of the URLs required to access each of three resource types including:
+    * books 
+    * characters 
+    * houses
+    ###
+    Each resource type is accessible via the HTTP GET method.
+    ###
+    Within each resource type, endpoints fall into two categories:
+    ###
+    **{base url}/{resource type}:**      
+    Retrieves the complete data set for each resource of a specified type.  This data can be filtered with the addition of query parameters.
+    ###
+    **{base url}/{resource type}/{resource-id}:**      
+    Retrieves the data set for a single specific resource.
+    
     
     If you're interested in using a native implementation, please take a look at the [Libraries](#tag/libraries) section.
     
     # Authentication
-    The API of Ice And Fire is an open API. This means that no authentication is required to query the API for data. Since no authentication is required, the API only supports the `GET` request method.
+    The API of Ice And Fire is an open API. This means that no authentication is required to query the API for data. For this reason, the API only supports the `GET` request method.
     
     # Caching
-    To help our server and your client we provide a few ways for you to use caching. Each API response includes the [ETag-header](https://en.wikipedia.org/wiki/HTTP_ETag) and the Last-Modified header. These headers can be used to ask our server if the data has changed or not. If the data has not changed you will receive an empty response body with a [304 Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1). If the data has changed you will receive a 200 with the updated data.
+    To help our server and your client we provide a few ways for you to use caching. Each API response header contains both the [ETag-field](https://en.wikipedia.org/wiki/HTTP_ETag) and the Last-Modified field. You can use these header fields in your application to ask our server if the data you are requesting has changed since the last request. If the data has not changed, the server will return an empty response body with a [304 Not Modified](https://tools.ietf.org/html/rfc7232#section-4.1) error. If the data has changed, the server wil return the updated data along with a `200 OK` status code. 
     
-    #### To use the ETag, include the following header in your request:
+    ##### To use the ETag, include the following statement in your request header:
     
     ```json
     If-None-Match: "your_etag_here"
     ```   
-     #### To use Last-Modified, include the following header in your request:   
+     ##### To use Last-Modified, include the following statement in your request header:   
     ```json
     If-Modified-Since: "date_here"
     ```       
-    We advise you to use the above mentioned caching strategies, this will increase the speed of your client as well as save us bandwidth.
+    We advise you to use caching as described, as this will increase the speed of your client as well as save us bandwidth.
     
     # Pagination
-    An API of Ice and Fire contains a vast amount of data about the world of Westeros. To prevent our servers from getting cranky, the API will automatically paginate the responses. You will learn how to create requests with pagination parameters and consume the response.
+    An API of Ice and Fire contains a vast amount of data about the world of Westeros. To prevent our servers from getting cranky, the API automatically paginates large result sets. Therefore, it is essential that you understand how to use the API's pagination parameters. 
     
-    ### Things worth noting
+    ### Things worth noting about pagination
     
-    1. Information about the pagination is included in the [Link header](http://tools.ietf.org/html/rfc5988)
-    2. Page numbering is 1-based
-    3. You can specify how many items you want to receive per page, the maximum is 50.
+    1. Page numbering is 1-based
+    2. Pagination requests are made using the query parameters `page` and `pageSize`.
+    3. To make page retrieval easier, the API returns links to relevant pages in the [response header](http://tools.ietf.org/html/rfc5988).
+    4. When no pagination parameters are present in a request, the API returns the first page of ten results by default. 
     
-    ### Constructing a request with pagination
+    ###
+    ### Using query parameters to construct a request with pagination
     
-    You specify which page you want to access with the `?page` parameter, if you don't provide the `?page` parameter the first page will be returned. You can also specify the size of the page with the `?pageSize` parameter, if you don't provide the `?pageSize` parameter the default size of 10 will be used.
+    | Action                                             | Query String       |
+    | :------------------------------------------------- |:-------------------|
+    | Request a specific page                            | ?page=3            |
+    | Specify the number of items to return per page     | ?pageSize=20       |
+    | Combined query                                     | ?page=4&pageSize=30|
     
-    Let's make a request for the first page of characters with a page size of 10. Since we're only interested in the pagination information we provide the `-I` parameter to say that we only care about the headers.
+    ###
+    ### Accessing page links
+    
+    Let's make a request for the first page of characters with a page size of 10. Since we're only interested in retrieving pagination information from the header, add `-I` parameter.
     
     ```json
     $ curl -I  "http://www.anapioficeandfire.com/api/characters?page=1&pageSize=10"
     ```
-    ##### Here's the Link parameter in the response header:
+    ##### Example of the Link field as it appears within the response header:
     ```json
     Link: <http://www.anapioficeandfire.com/api/characters?page=2&pageSize=10>; rel="next",
     <http://www.anapioficeandfire.com/api/characters?page=1&pageSize=10>; rel="first",  
     <http://www.anapioficeandfire.com/api/characters?page=214&pageSize=10>; rel="last"
     ```
     
-    ##### Possible values for `rel` in the Link parameter are:
+    ##### Possible values for `rel` in the Link field are:
     | Value    | Description                              |
     | :------- |:-----------------------------------------|
     | next     | The link to the next page of results.    |
@@ -66,24 +96,24 @@ info:
     | first    | The link to the first page of results.   |
     | last     | The link to the last page of results.    |
     
-    These links can then be used to navigate to other pages of results.
-    
+    These links can then be used to navigate to other pages within the result set.
     
     # Rate Limiting
-    To prevent malicious usage of our API we've a limit on the number of requests a given IP address can make to the API. This limit is set to 20000 requests per day. There should be no reason for hitting the limit if you implement proper caching strategies in your client. If you happen to hit the limit you'll receive a [403 Forbidden](https://en.wikipedia.org/wiki/HTTP_403) on all your requests for the remainder of the 24 hour time period.
+    To prevent malicious usage of our API we limit the number of requests that can be made in a 24 hour period to 20,000.  You can avoid reaching this limit by implementing proper caching strategies in your client application. Should the limit be reached, the API will generate a [403 Forbidden](https://en.wikipedia.org/wiki/HTTP_403) error in response to any additional requests it receives within the 24 hour time period.
     
     
-
+    
     # Versioning
-    Custom media types are used in An API of Ice And Fire to let consumers choose which version of the data they wish to receive. This is done by adding the following type to the Accept header when you make a request. Note that media types are specific to resources, this allows them to change independently from each other.
+    Through the use of custom media types, this API enables you to choose which version of the data you want to query. To specify a version, modify the Accept field within your request header as shown below.  Note that media types are specific to resources, which enable them to change independently from one another.
     ###
-    >**If a version is not specified in the request the default version will be used. The default version may change in the future and can thus break the consumer's application. Make sure to always request a specific version in the** `Accept` **header as shown in the example below.**
-    ###
-    You specify a version like so:
+    To specify a version, add this type statement to the Accept field:
     ```json
     application/vnd.anapioficeandfire+json; version=1
     ```
-#	 
+    ###
+    > **Important:** If a version number is not specified in the Accept request-header field, the default version will be used. The default version may change in the future and potentially break the consumer's application. To avoid this issue, we recommend that you always specify a version number in the header of each request.
+    ###
+#In Redoc, tags appear as menu headings.  Paths, if they exist, are listed as subheadings under the tags they reference. 	 
 tags:
   - name: API Root
     description: |
@@ -93,9 +123,9 @@ tags:
   - name: books
     description: The API currently contains data on all five published novels in the *A Song of Ice and Fire*  © series.  It also references additional material in the form of novellas.  
   - name: characters
-    description: The API contains information on 2000+ characters.
+    description: The API contains information on over 2000 fictional characters that inhabit the Ice and Fire universe.
   - name: houses
-    description: The API contains information on 400+ houses.
+    description: The API contains information on the over 400 houses that govern the population of Westeros.
   - name: errors
     description: |
       Error codes returned by the API include:	 
@@ -104,7 +134,7 @@ tags:
       | :------------:|:-----------------------------------------|
       | 304           | The data you requested has not changed since you last requested it.  See [Caching](#section/Caching).    |
       | 403           | Daily limit of 20000 requests has been reached. Server will deny subsequent requests for 24 hours.  See [Rate Limiting](#section/Rate-Limiting). |
-      | 4XX           | Request contains invalid data and cannot be processed by the server.    |
+      | 4XX           | Request is invalid and cannot be processed by the server.    |
       
   - name: libraries
     description: |
@@ -125,17 +155,19 @@ tags:
       * [WesterosKit](https://github.com/fitomad/WesterosKit) by [Adolfo](https://github.com/fitomad)
   - name: licensing & copyright
     description: |
+      *An API of Ice and Fire* © is the creation of [Joakim Skoog](https://github.com/joakimskoog/AnApiOfIceAndFire). 
       The *A Song of Ice and Fire* © series and its data is the property of George R.R. Martin. The *Game of Thrones* television series is the property of HBO ®. API data was collected from free sources such as [*A Wiki of Ice and Fire*](http://awoiaf.westeros.org/index.php/Main_Page) and is used without claim of ownership.
       ###
       This project uses a BSD license.
-      
+ 
+#In Redoc, paths appear in the menu under the heading name referenced in `tags`.
 paths:
   /api:
     get:
       tags:
         - API Root
       summary: Get links to API Resources
-      description: Returns a url for each resource type (books, characters, houses) for use in a subsequent request.  
+      description: Returns the URL for each resource type (books, characters, houses) for use in a subsequent request.  
       operationId: getRoot
       produces:
         - application/json
@@ -198,6 +230,7 @@ paths:
           required: false
           type: integer
           minimum: 1
+          default: 1
         - name: pageSize
           in: query
           description: |
@@ -205,6 +238,7 @@ paths:
           required: false
           type: integer
           minimum: 1
+          maximum: 50
           default: 10
       responses:
         '200':
@@ -223,7 +257,7 @@ paths:
     get:
       tags:
         - books
-      summary: Get information about a specific book
+      summary: Get a specific book
       description: Returns data for the book with the specified book-id. 
       operationId: findBookById
       produces:
@@ -304,6 +338,7 @@ paths:
           required: false
           type: integer
           minimum: 1
+          default: 1
         - name: pageSize
           in: query
           description: |
@@ -311,12 +346,18 @@ paths:
           required: false
           type: integer
           minimum: 1
+          maximum: 50
           default: 10
       responses:
         '200':
           description: OK
           schema:
             $ref: '#/definitions/CharactersResponseArray'
+#Example of how to add response headers.  Did not implement.
+#          headers: 
+#            Link: 
+#              description: A set of up to four URLs, referencing the previous, next, first, and last page in the result set.
+#              type: string of comma separated URLs
       
   /api/characters/{character-id}:
     parameters:
@@ -329,7 +370,7 @@ paths:
     get:
       tags:
         - characters
-      summary: Get information about a specific character
+      summary: Get a specific character
       description: Returns data for the character with the specified character-id.
       operationId: findCharacterById
       produces:
@@ -429,6 +470,7 @@ paths:
           required: false
           type: integer
           minimum: 1
+          default: 1
         - name: pageSize
           in: query
           description: |
@@ -436,6 +478,7 @@ paths:
           required: false
           type: integer
           minimum: 1
+          maximum: 50
           default: 10
       responses:
         '200':
@@ -454,7 +497,7 @@ paths:
     get:
       tags:
         - houses
-      summary: Get information about a specific house
+      summary: Get a specific house
       description: Returns data for the house with the specified house-id.
       operationId: findHouseById
       produces:
